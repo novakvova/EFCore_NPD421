@@ -1,23 +1,32 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using _1.SimpleDatabase.Services;
+
 Console.InputEncoding = System.Text.Encoding.UTF8;
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-Console.WriteLine("Привіт Команда!");
+DatabaseManager databaseManager = new DatabaseManager();
 
-string connStr = "Host=ep-little-king-a2zmnpi8-pooler.eu-central-1.aws.neon.tech;" +
-    "Database=neondb;" +
-    "Username=neondb_owner;" +
-    "Password=npg_hPA69mJiYolg;";
-
-using (var conn = new Npgsql.NpgsqlConnection(connStr))
-{
-    conn.Open();
-    Console.WriteLine("Підключення до бази даних успішне!");
-    using (var cmd = new Npgsql.NpgsqlCommand("SELECT version();", conn))
+int action = 0;
+do {     
+    Console.WriteLine("Виберіть дію:");
+    Console.WriteLine("0. Вийти");
+    Console.WriteLine("1. Створити таблиці");
+    
+    if (!int.TryParse(Console.ReadLine(), out action))
     {
-        // Отримати результат з першого рядку таблиці, яку прочитали
-        var version = cmd.ExecuteScalar().ToString();
-        Console.WriteLine($"Версія бази даних: {version}");
+        Console.WriteLine("Будь ласка, введіть коректне число.");
+        continue;
     }
-    // Додайте тут ваш код для роботи з базою даних
-}
+    switch (action)
+    {
+        case 1:
+            databaseManager.ExecuteCreateTabels();
+            break;
+        case 0:
+            Console.WriteLine("Вихід з програми.");
+            break;
+        default:
+            Console.WriteLine("Невідома дія. Спробуйте ще раз.");
+            break;
+    }
+} while (action != 0);
