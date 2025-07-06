@@ -39,8 +39,47 @@ public class DatabaseManager : IDisposable
         }
     }
 
+    public void DropTables()
+    {
+        string file = Path.Combine(Directory.GetCurrentDirectory(), "SqlScripts", "dropTabels.sql");
+        if (!File.Exists(file))
+        {
+            Console.WriteLine($"Файл {file} не існує.");
+            return;
+        }
+        // Зчитування SQL скриптів з файлів у директорії
+        var lines = File.ReadAllLines(file);
+        foreach (var query in lines)
+        {
+            using (var cmd = new NpgsqlCommand(query, _conn))
+            {
+                // Отримати результат з першого рядку таблиці, яку прочитали
+                var result = cmd.ExecuteNonQuery();
+                Console.WriteLine($"--- {query} ---");
+            }
+        }
+    }
+
+    
+
     public void Dispose()
     {
         _conn.Dispose();
+    }
+    public void PrintTableList()
+    {
+        string sql = @"
+            SELECT table_name as name
+            FROM information_schema.tables
+            WHERE table_schema = 'public'
+                AND table_type = 'BASE TABLE';
+        ";
+        using var cmd = new NpgsqlCommand(sql, _conn);
+        using var reader = cmd.ExecuteReader();
+        Console.WriteLine("Tables in the database:");
+        while (reader.Read())
+        {
+            Console.WriteLine(reader["name"]);
+        }
     }
 }

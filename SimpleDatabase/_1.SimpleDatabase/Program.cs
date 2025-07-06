@@ -11,7 +11,10 @@ do {
     Console.WriteLine("Виберіть дію:");
     Console.WriteLine("0. Вийти");
     Console.WriteLine("1. Створити таблиці");
-    
+    Console.WriteLine("2. Видалити таблиці");
+    Console.WriteLine("3. Показати таблиці");
+    Console.Write("Введіть номер дії: ");
+
     if (!int.TryParse(Console.ReadLine(), out action))
     {
         Console.WriteLine("Будь ласка, введіть коректне число.");
@@ -21,6 +24,12 @@ do {
     {
         case 1:
             databaseManager.ExecuteCreateTabels();
+            break;
+        case 2:
+            databaseManager.DropTables();
+            break;
+        case 3:
+            databaseManager.PrintTableList();
             break;
         case 0:
             Console.WriteLine("Вихід з програми.");
