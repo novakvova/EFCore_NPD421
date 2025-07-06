@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using _1.SimpleDatabase.Models;
 using _1.SimpleDatabase.Services;
 
 Console.InputEncoding = System.Text.Encoding.UTF8;
@@ -13,6 +14,7 @@ do {
     Console.WriteLine("1. Створити таблиці");
     Console.WriteLine("2. Видалити таблиці");
     Console.WriteLine("3. Показати таблиці");
+    Console.WriteLine("4. Додати користувачів");
     Console.Write("Введіть номер дії: ");
 
     if (!int.TryParse(Console.ReadLine(), out action))
@@ -30,6 +32,26 @@ do {
             break;
         case 3:
             databaseManager.PrintTableList();
+            break;
+        case 4:
+            string email = "ivan@gmail.com";
+            var user = databaseManager.GetUserByEmail(email);
+            if (user != null)
+            {
+                Console.WriteLine($"Користувач з email {email} вже існує.");
+                break;
+            }
+            databaseManager.InsertUsers(new List<User>
+            {
+                new User 
+                {
+                    FirstName = "Іван",
+                    LastName = "Бобер",
+                    Email = "ivan@gmail.com",
+                    Phone = "+380501234567",
+                    Password = "123456"
+                } 
+            });
             break;
         case 0:
             Console.WriteLine("Вихід з програми.");
