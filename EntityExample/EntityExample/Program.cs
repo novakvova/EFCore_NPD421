@@ -3,6 +3,9 @@ using EntityExample.Data.Entities;
 using Bogus;
 using System.Globalization;
 using EntityExample.Models;
+using EntityExample.Mappers;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 
 Console.InputEncoding = System.Text.Encoding.UTF8;
 Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -44,17 +47,32 @@ void DisplayAllUsers()
         return;
     }
 
+    //var items = query
+    //    .OrderBy(x => x.LastName)
+    //    .ThenBy(x => x.FistName)
+    //    .Skip(1000) // Можна використовувати для пагінації
+    //    .Take(10) // Обмеження на кількість користувачів для виведення
+    //    .Select(x => new UserItemModel
+    //{
+    //    Id = x.Id,
+    //    Name = $"{x.LastName} {x.FistName}",
+    //    Email = x.Email
+    //}).ToList(); 
+
+    var config = new AutoMapper.MapperConfiguration(cfg =>
+    {
+        cfg.AddProfile(new UserProfile());
+    });
+
+
     var items = query
+        .AsNoTracking() // Використовується для оптимізації запитів, якщо не потрібно відслідковувати зміни
         .OrderBy(x => x.LastName)
         .ThenBy(x => x.FistName)
         .Skip(1000) // Можна використовувати для пагінації
         .Take(10) // Обмеження на кількість користувачів для виведення
-        .Select(x => new UserItemModel
-    {
-        Id = x.Id,
-        Name = $"{x.LastName} {x.FistName}",
-        Email = x.Email
-    }).ToList(); 
+        .ProjectTo<UserItemModel>(config)
+        .ToList();
     Console.WriteLine("Список всіх користувачів:");
     foreach (var user in items)
     {
