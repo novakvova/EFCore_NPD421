@@ -44,7 +44,12 @@ void DisplayAllUsers()
         return;
     }
 
-    var items = query.Select(x => new UserItemModel
+    var items = query
+        .OrderBy(x => x.LastName)
+        .ThenBy(x => x.FistName)
+        .Skip(1000) // Можна використовувати для пагінації
+        .Take(10) // Обмеження на кількість користувачів для виведення
+        .Select(x => new UserItemModel
     {
         Id = x.Id,
         Name = $"{x.LastName} {x.FistName}",
