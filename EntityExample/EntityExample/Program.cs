@@ -2,6 +2,7 @@
 using EntityExample.Data.Entities;
 using Bogus;
 using System.Globalization;
+using EntityExample.Models;
 
 Console.InputEncoding = System.Text.Encoding.UTF8;
 Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -36,22 +37,27 @@ void DisplayAllUsers()
     Thread.CurrentThread.CurrentCulture = new CultureInfo("uk-UA");
     Thread.CurrentThread.CurrentUICulture = new CultureInfo("uk-UA");
     using var context = new AppBeaverContext();
-    var users = context.Users.ToList();
-    if (users.Count == 0)
+    var query = context.Users.AsQueryable();
+    if (query.Count() == 0)
     {
         Console.WriteLine("Немає користувачів у базі даних.");
         return;
     }
-    
 
+    var items = query.Select(x => new UserItemModel
+    {
+        Id = x.Id,
+        Name = $"{x.LastName} {x.FistName}",
+        Email = x.Email
+    }).ToList(); 
     Console.WriteLine("Список всіх користувачів:");
-    foreach (var user in users)
+    foreach (var user in items)
     {
         Console.WriteLine($"Id: {user.Id}, " +
-            $"{user.LastName} {user.FistName}, " +
-            $"Email: {user.Email}, " +
-            $"Дата створення: {user.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss")}, " +
-            $"Дата оновлення: {user.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss")}");
+            $"{user.Name}, " +
+            $"Email: {user.Email}");
+           // $"Дата створення: {user.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss")}, " +
+           // $"Дата оновлення: {user.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss")}");
     }
 }
 

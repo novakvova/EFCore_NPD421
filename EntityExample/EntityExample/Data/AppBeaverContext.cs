@@ -11,6 +11,7 @@ public class AppBeaverContext : DbContext
     {
 
     }
+
     /// <summary>
     /// Конструктор для DI (Dependency Injection)
     /// </summary>
