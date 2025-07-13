@@ -17,6 +17,10 @@ do
     Console.WriteLine("0. Вийти");
     Console.WriteLine("1. Додати рандом користувачів");
     Console.WriteLine("2. Вивести всіх користувачів");
+    Console.WriteLine("3. Видалити по id");
+    Console.WriteLine("4. Видалити усіх користувачів");
+    Console.WriteLine("5. Редагувати користувача");
+    Console.Write("Ваш вибір: ");
     action = int.Parse(Console.ReadLine() ?? "0");
     switch (action)
     {
@@ -28,6 +32,85 @@ do
             break;
         case 2:
             DisplayAllUsers();
+            break;
+        case 3:
+            Console.WriteLine("Введіть id користувача для видалення:");
+            if (int.TryParse(Console.ReadLine(), out int userId))
+            {
+                using var context = new AppBeaverContext();
+                var user = context.Users.SingleOrDefault(x=>x.Id == userId);
+                if (user != null)
+                {
+                    context.Users.Remove(user);
+                    context.SaveChanges();
+                    Console.WriteLine($"Користувача з id {userId} видалено.");
+                }
+                else
+                {
+                    Console.WriteLine($"Користувача з id {userId} не знайдено.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Невірний формат id.");
+            }
+            break;
+
+        case 4:
+            using (var context = new AppBeaverContext())
+            {
+                var users = context.Users.ToList();
+                if (users.Count == 0)
+                {
+                    Console.WriteLine("Немає користувачів для видалення.");
+                    break;
+                }
+                context.Users.RemoveRange(users);
+                context.SaveChanges();
+                Console.WriteLine("Всі користувачі видалені.");
+            }
+            break;
+
+        case 5:
+            Console.WriteLine("Введіть id користувача для видалення:");
+            if (int.TryParse(Console.ReadLine(), out int userEditId))
+            {
+                using var context = new AppBeaverContext();
+                var user = context.Users.SingleOrDefault(x => x.Id == userEditId);
+                if (user != null)
+                {
+                    Console.WriteLine("Вкажіть прізвище");
+                    var temp = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        user.LastName = temp;
+                    }
+                    Console.WriteLine("Вкажіть ім'я");
+                    temp = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        user.FistName = temp;
+                    }
+                    Console.WriteLine("Вкажіть email");
+                    temp = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        user.Email = temp;
+                    }
+                    user.UpdatedAt = DateTime.Now.ToUniversalTime(); // Оновлюємо дату оновлення
+                    context.SaveChanges();
+                    Console.WriteLine($"Користувача з id {userEditId} зміненно.");
+                }
+                else
+                {
+                    Console.WriteLine($"Користувача з id {userEditId} не знайдено.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Невірний формат id.");
+            }
+
             break;
         default:
             Console.WriteLine("Невірний вибір. Спробуйте ще раз.");
@@ -64,12 +147,11 @@ void DisplayAllUsers()
         cfg.AddProfile(new UserProfile());
     });
 
-
     var items = query
         .AsNoTracking() // Використовується для оптимізації запитів, якщо не потрібно відслідковувати зміни
         .OrderBy(x => x.LastName)
         .ThenBy(x => x.FistName)
-        .Skip(1000) // Можна використовувати для пагінації
+        .Skip(0) // Можна використовувати для пагінації
         .Take(10) // Обмеження на кількість користувачів для виведення
         .ProjectTo<UserItemModel>(config)
         .ToList();
