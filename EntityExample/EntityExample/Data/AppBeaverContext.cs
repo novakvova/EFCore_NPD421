@@ -1,7 +1,7 @@
-﻿
-using EntityExample.Data.Entities;
+﻿using EntityExample.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace EntityExample.Data;
 
@@ -23,7 +23,8 @@ public class AppBeaverContext : DbContext
 
         string connStr = conf["ConnectionStrings:DefaultConnection"];
         // Підключення до бази даних
-        optionsBuilder.UseNpgsql(connStr);
+        optionsBuilder.UseNpgsql(connStr)
+            .LogTo(Console.WriteLine, LogLevel.Information);
     }
 
     /// <summary>
