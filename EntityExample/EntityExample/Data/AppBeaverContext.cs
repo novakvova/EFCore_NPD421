@@ -43,4 +43,6 @@ public class AppBeaverContext : DbContext
     /// </summary>
     public DbSet<ProductEntity> Products { get; set; }
 
+    public DbSet<OrderStatusEntity> OrderStatuses { get; set; }
+
 }
