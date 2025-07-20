@@ -16,6 +16,21 @@ using var context = new AppBeaverContext();
 CategoryService categoryService = new CategoryService(context);
 await categoryService.SeedFakeCategories();
 
+ProductService productService = new ProductService(context);
+await productService.SeedFakeProducts();
+
+var items = await productService.GetCountProductsAsync(10);
+
+foreach (var item in items)
+{
+    Console.WriteLine($"Id: {item.Id}, " +
+        $"Назва: {item.Name}, " +
+        $"Ціна: {item.Price}, " +
+        $"Категорія: {item.CategoryName}");
+}
+
+
+/*
 
 int action = 0;
 do
@@ -125,6 +140,7 @@ do
     }
 } while (action != 0);
 
+*/
 void DisplayAllUsers()
 {
     Thread.CurrentThread.CurrentCulture = new CultureInfo("uk-UA");
