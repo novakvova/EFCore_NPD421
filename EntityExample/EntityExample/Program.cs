@@ -18,18 +18,17 @@ await categoryService.SeedFakeCategories();
 
 ProductService productService = new ProductService(context);
 await productService.SeedFakeProducts();
+///var items = await productService.GetCountProductsAsync(10);
+///foreach (var item in items)
+///{
+///    Console.WriteLine($"Id: {item.Id}, " +
+///        $"Назва: {item.Name}, " +
+///        $"Ціна: {item.Price}, " +
+///        $"Категорія: {item.CategoryName}");
+///}
 
-var items = await productService.GetCountProductsAsync(10);
-
-foreach (var item in items)
-{
-    Console.WriteLine($"Id: {item.Id}, " +
-        $"Назва: {item.Name}, " +
-        $"Ціна: {item.Price}, " +
-        $"Категорія: {item.CategoryName}");
-}
-
-
+OrderService orderService = new OrderService(context);
+await orderService.SeedStatuses();
 /*
 
 int action = 0;
