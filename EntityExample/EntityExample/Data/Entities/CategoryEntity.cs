@@ -11,4 +11,6 @@ public class CategoryEntity
     [StringLength(200)]
     public string Name { get; set; } = String.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public virtual ICollection<ProductEntity> Products { get; set; } = new List<ProductEntity>();
 }
