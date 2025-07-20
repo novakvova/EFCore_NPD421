@@ -16,4 +16,6 @@ public class UserEntity
     public string Email { get; set; } = String.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    public virtual ICollection<OrderEntity> Orders { get; set; } = new List<OrderEntity>();
 }

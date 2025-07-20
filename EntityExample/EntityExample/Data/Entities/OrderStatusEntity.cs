@@ -10,4 +10,6 @@ public class OrderStatusEntity
     public int Id { get; set; }
     [StringLength(200)]
     public string Name { get; set; } = string.Empty;
+
+    public virtual ICollection<OrderEntity> Orders { get; set; } = new List<OrderEntity>();
 }
