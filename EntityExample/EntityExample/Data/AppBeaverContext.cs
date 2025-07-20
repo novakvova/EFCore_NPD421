@@ -32,4 +32,8 @@ public class AppBeaverContext : DbContext
     /// Таблиця в БД
     /// </summary>
     public DbSet<UserEntity> Users { get; set; }
+    /// <summary>
+    /// Список категорій
+    /// </summary>
+    public DbSet<CategoryEntity> Categories { get; set; }
 }

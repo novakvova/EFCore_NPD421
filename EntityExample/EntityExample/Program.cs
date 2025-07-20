@@ -6,9 +6,16 @@ using EntityExample.Models;
 using EntityExample.Mappers;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using EntityExample.Services;
 
 Console.InputEncoding = System.Text.Encoding.UTF8;
 Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+using var context = new AppBeaverContext();
+
+CategoryService categoryService = new CategoryService(context);
+await categoryService.SeedFakeCategories();
+
 
 int action = 0;
 do
@@ -37,7 +44,7 @@ do
             Console.WriteLine("Введіть id користувача для видалення:");
             if (int.TryParse(Console.ReadLine(), out int userId))
             {
-                using var context = new AppBeaverContext();
+                //using var context = new AppBeaverContext();
                 var user = context.Users.SingleOrDefault(x=>x.Id == userId);
                 if (user != null)
                 {
@@ -57,8 +64,8 @@ do
             break;
 
         case 4:
-            using (var context = new AppBeaverContext())
-            {
+            //using (var context = new AppBeaverContext())
+            //{
                 var users = context.Users.ToList();
                 if (users.Count == 0)
                 {
@@ -68,14 +75,14 @@ do
                 context.Users.RemoveRange(users);
                 context.SaveChanges();
                 Console.WriteLine("Всі користувачі видалені.");
-            }
+            //}
             break;
 
         case 5:
             Console.WriteLine("Введіть id користувача для видалення:");
             if (int.TryParse(Console.ReadLine(), out int userEditId))
             {
-                using var context = new AppBeaverContext();
+                //using var context = new AppBeaverContext();
                 var user = context.Users.SingleOrDefault(x => x.Id == userEditId);
                 if (user != null)
                 {
