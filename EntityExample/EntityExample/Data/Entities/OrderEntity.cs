@@ -20,4 +20,6 @@ public class OrderEntity
     [ForeignKey(nameof(User))]
     public int UserId { get; set; }
     public UserEntity User { get; set; } = null!; // Навігаційна властивість для зв'язку з користувачем
+
+    public virtual ICollection<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();
 }

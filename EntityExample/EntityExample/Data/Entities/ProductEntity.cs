@@ -19,4 +19,6 @@ public class ProductEntity
     [ForeignKey(nameof(Category))]
     public int CategoryId { get; set; }
     public CategoryEntity Category { get; set; } = null!; // Навігаційна властивість для зв'язку з категорією
+
+    public virtual ICollection<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();
 }
